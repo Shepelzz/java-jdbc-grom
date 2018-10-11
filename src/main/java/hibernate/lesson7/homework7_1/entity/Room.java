@@ -50,7 +50,7 @@ public class Room {
     }
 
     @OneToOne(fetch = LAZY)
-    //@JoinColumn(name = "HOTEL_ID", referencedColumnName = "ID")
+    @JoinColumn(name = "HOTEL_ID", referencedColumnName = "ID")
     public Hotel getHotel() {
         return hotel;
     }
