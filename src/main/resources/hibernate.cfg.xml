@@ -15,6 +15,7 @@
         <mapping class="hibernate.lesson6.homework6_2.Product"/>
         <mapping class="hibernate.lesson7.homework7_1.entity.Hotel"/>
         <mapping class="hibernate.lesson7.homework7_1.entity.Room"/>
-
+        <mapping class="hibernate.lesson8.test.entity.Hotel"/>
+        <mapping class="hibernate.lesson8.test.entity.Room"/>
     </session-factory>
 </hibernate-configuration>

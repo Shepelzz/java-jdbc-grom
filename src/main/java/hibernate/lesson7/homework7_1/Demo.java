@@ -28,6 +28,6 @@ public class Demo {
             room.setPrice(120);
             room.setHotel(hotelDAO.findById(2));
 
-        //roomDAO.save(room);
+        roomDAO.save(room);
     }
 }
