@@ -1,14 +1,32 @@
 package hibernate.lesson8.homework8_1.model;
 
-import hibernate.lesson8.homework8_1.exception.InternalServerError;
+import javax.persistence.*;
+import javax.persistence.Entity;
+import java.util.List;
 
-public class Hotel extends Entity {
+@Entity
+@Table(name = "FP_HOTEL")
+public class Hotel implements GeneralModel {
+    @Id
+    @SequenceGenerator(name = "HOTEL_SEQ", sequenceName = "FP_HOTEL_PK_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "HOTEL_SEQ")
+    @Column(name = "ID")
+    private long id;
+    @Column(name = "HOTEL_NAME")
     private String name;
+    @Column(name = "HOTEL_COUNTRY")
     private String country;
+    @Column(name = "HOTEL_CITY")
     private String city;
+    @Column(name = "HOTEL_STREET")
     private String street;
+    @OneToMany (cascade = CascadeType.ALL, mappedBy = "hotel", fetch = FetchType.EAGER)
+    private List<Room> rooms;
 
-    public Hotel(){}
+    @Override
+    public long getId() {
+        return id;
+    }
 
     public String getName() {
         return name;
@@ -26,6 +44,14 @@ public class Hotel extends Entity {
         return street;
     }
 
+    public List<Room> getRooms() {
+        return rooms;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -40,30 +66,5 @@ public class Hotel extends Entity {
 
     public void setStreet(String street) {
         this.street = street;
-    }
-
-    @Override
-    public Hotel parseStringToObject(String input) throws InternalServerError {
-        String[] data = input.split(",");
-        try {
-            setId(Long.valueOf(data[0]));
-            name = data[1];
-            country = data[2];
-            city = data[3];
-            street = data[4];
-            return this;
-        }catch (Exception e){
-            throw new InternalServerError(getClass().getName(), "parseStringToObject","error parsing text data ["+input+"]", e.getMessage());
-        }
-    }
-
-    @Override
-    public String toString() {
-        return
-                (getId() == 0 ? "" : getId()+",")+
-                        name+","+
-                        country+","+
-                        city+","+
-                        street;
     }
 }

@@ -19,6 +19,8 @@ public class Hotel {
     private String city;
     @Column(name = "HOTEL_STREET")
     private String street;
+    @Enumerated(EnumType.ORDINAL)
+    private Type type;
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "hotel", fetch = FetchType.EAGER)
     private List<Room> rooms;
 
@@ -41,6 +43,10 @@ public class Hotel {
 
     public String getStreet() {
         return street;
+    }
+
+    public Type getType() {
+        return type;
     }
 
     public List<Room> getRooms() {
@@ -67,6 +73,10 @@ public class Hotel {
         this.street = street;
     }
 
+    public void setType(Type type) {
+        this.type = type;
+    }
+
     public void setRooms(List<Room> rooms) {
         this.rooms = rooms;
     }
@@ -79,7 +89,8 @@ public class Hotel {
                 ", country='" + country + '\'' +
                 ", city='" + city + '\'' +
                 ", street='" + street + '\'' +
-                ", rooms count=" + rooms.size() +
+                ", type=" + type.toString() +
+                ", rooms=" + rooms.size() +
                 '}';
     }
 }

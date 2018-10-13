@@ -4,17 +4,35 @@ import hibernate.lesson8.homework8_1.dao.RoomDAO;
 import hibernate.lesson8.homework8_1.dao.UserDAO;
 import hibernate.lesson8.homework8_1.exception.InternalServerError;
 
+import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Order extends Entity {
+@javax.persistence.Entity
+@Table(name = "FP_ORDER")
+public class Order implements GeneralModel {
+    @Id
+    @SequenceGenerator(name = "ORDER_SEQ", sequenceName = "FP_ORDER_PK_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ORDER_SEQ")
+    @Column(name = "ID")
+    private long id;
+    @ManyToOne
+    @JoinColumn(name="USER_ID", nullable = false)
     private User user;
+    @ManyToOne
+    @JoinColumn(name="ROOM_ID", nullable = false)
     private Room room;
+    @Column(name = "DATE_FROM")
     private Date dateFrom;
+    @Column(name = "DATE_TO")
     private Date dateTo;
+    @Column(name = "MONEY_PAID")
     private double moneyPaid;
 
-    public Order(){}
+    @Override
+    public long getId() {
+        return id;
+    }
 
     public User getUser() {
         return user;
@@ -36,6 +54,10 @@ public class Order extends Entity {
         return moneyPaid;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public void setUser(User user) {
         this.user = user;
     }
@@ -54,32 +76,5 @@ public class Order extends Entity {
 
     public void setMoneyPaid(double moneyPaid) {
         this.moneyPaid = moneyPaid;
-    }
-
-    @Override
-    public Order parseStringToObject(String input) throws InternalServerError {
-        String[] data = input.split(",");
-        try {
-            setId(Long.valueOf(data[0]));
-            user = new UserDAO().getEntityById(Long.valueOf(data[1]));
-            room = new RoomDAO().getEntityById(Long.valueOf(data[2]));
-            dateFrom = new SimpleDateFormat("dd-MM-yyyy").parse(data[3]);
-            dateTo = new SimpleDateFormat("dd-MM-yyyy").parse(data[4]);
-            moneyPaid = Double.valueOf(data[5]);
-            return this;
-        }catch (Exception e){
-            throw new InternalServerError(getClass().getName(), "parseStringToObject","error parsing text data ["+input+"]", e.getMessage());
-        }
-    }
-
-    @Override
-    public String toString() {
-        return
-                (getId() == 0 ? "" : getId()+",")+
-                        user.getId()+","+
-                        room.getId()+","+
-                        new SimpleDateFormat("dd-MM-yyyy").format(dateFrom)+","+
-                        new SimpleDateFormat("dd-MM-yyyy").format(dateTo)+","+
-                        moneyPaid;
     }
 }

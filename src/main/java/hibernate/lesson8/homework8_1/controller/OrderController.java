@@ -12,12 +12,12 @@ public class OrderController {
     }
 
     public void bookRoom(long roomId, long userId, double moneyPaid) throws InternalServerError {
-        Session.checkAuthorization("bookRoom");
-        orderService.bookRoom(roomId, userId, moneyPaid);
+//        Session.checkAuthorization("bookRoom");
+//        orderService.bookRoom(roomId, userId, moneyPaid);
     }
 
     public void cancelReservation(long roomId, long userId) throws InternalServerError {
-        Session.checkAuthorization("cancelReservation");
-        orderService.cancelReservation(roomId, userId);
+//        Session.checkAuthorization("cancelReservation");
+//        orderService.cancelReservation(roomId, userId);
     }
 }

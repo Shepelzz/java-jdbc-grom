@@ -1,46 +1,56 @@
 package hibernate.lesson8.homework8_1.dao;
-
 import hibernate.lesson8.homework8_1.exception.InternalServerError;
 import hibernate.lesson8.homework8_1.model.Hotel;
+import hibernate.lesson8.homework8_1.model.Room;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 public class HotelDAO extends GeneralDAO<Hotel>{
-    private static final String path = "files/HotelDb.txt";
-
-    public HotelDAO() throws InternalServerError {
-        super(path);
-    }
+    private static final String SQL_FIND_HOTELS_BY_NAME = "SELECT * FROM FP_HOTEL WHERE HOTEL_NAME = :name";
+    private static final String SQL_FIND_HOTELS_BY_CITY = "SELECT * FROM FP_HOTEL WHERE HOTEL_CITY = :name";
 
     //ADMIN
     public Hotel addHotel(Hotel hotel) throws InternalServerError {
-        return writeToFile(hotel);
+        return save(hotel, createSessionFactory().openSession().getTransaction());
     }
 
     //ADMIN
-    public void deleteHotel(long hotelId) throws InternalServerError {
-        deleteFromFileById(hotelId);
+    public void deleteHotel(Hotel hotel) throws InternalServerError {
+        delete(hotel);
     }
 
-    public Set<Hotel> findHotelByName(String name) throws InternalServerError {
-        Set<Hotel> result = new HashSet<>();
-        for(Hotel hotel : getAll())
-            if(hotel.getName().equals(name))
-                result.add(hotel);
-        return result;
+    public List<Hotel> findHotelByName(String name) throws InternalServerError {
+        try (Session session = createSessionFactory().openSession()) {
+
+            return (List<Hotel>) session.createSQLQuery(SQL_FIND_HOTELS_BY_NAME)
+                    .setParameter("name", name).list();
+
+        } catch (HibernateException e) {
+            throw new InternalServerError(getClass().getName()+"-findHotelByName "+name+" failed. "+e.getMessage());
+        }
     }
 
-    public Set<Hotel> findHotelByCity(String name) throws InternalServerError {
-        Set<Hotel> result = new HashSet<>();
-        for(Hotel hotel : getAll())
-            if(hotel.getCity().equals(name))
-                result.add(hotel);
-        return result;
+    public List<Hotel> findHotelByCity(String name) throws InternalServerError {
+        try (Session session = createSessionFactory().openSession()) {
+
+            return (List<Hotel>) session.createSQLQuery(SQL_FIND_HOTELS_BY_CITY)
+                    .setParameter("name", name).list();
+
+        } catch (HibernateException e) {
+            throw new InternalServerError(getClass().getName()+"-findHotelByCity "+name+" failed. "+e.getMessage());
+        }
     }
 
     @Override
-    public Hotel parseStringToObject(String input) throws InternalServerError {
-        return new Hotel().parseStringToObject(input);
+    Hotel findById(long id) throws InternalServerError {
+        try (Session session = createSessionFactory().openSession()) {
+
+            return session.get(Hotel.class, id);
+
+        } catch (HibernateException e) {
+            throw new InternalServerError(getClass().getName()+"-findById: "+id+" failed. "+e.getMessage());
+        }
     }
 }

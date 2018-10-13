@@ -18,21 +18,23 @@ public class RoomService {
 
     //ADMIN
     public Room addRoom(Room room) throws InternalServerError {
-        if(room.getNumberOfGuests() <= 0 || room.getPrice() <= 0 || room.getDateAvailableFrom() == null)
-            throw new BadRequestException("addRoom", "values can not be empty");
-
-        return roomDAO.addRoom(room);
+//        if(room.getNumberOfGuests() <= 0 || room.getPrice() <= 0 || room.getDateAvailableFrom() == null)
+//            throw new BadRequestException("addRoom", "values can not be empty");
+//
+//        return roomDAO.addRoom(room);
+        return null;
     }
 
     //ADMIN
-    public void deleteRoom(long roomId) throws InternalServerError {
-        roomDAO.deleteRoom(roomId);
+    public void deleteRoom(Room room) throws InternalServerError {
+//        roomDAO.deleteRoom(roomId);
     }
 
     public Set<Room> findRooms(Filter filter) throws InternalServerError {
-        if(filter.getDateAvailableFrom().before(new Date()))
-            throw new BadRequestException("findRooms", "Date can not be earlier than current");
-
-        return roomDAO.findRooms(filter);
+//        if(filter.getDateAvailableFrom().before(new Date()))
+//            throw new BadRequestException("findRooms", "Date can not be earlier than current");
+//
+//        return roomDAO.findRooms(filter);
+        return null;
     }
 }
