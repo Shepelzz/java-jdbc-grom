@@ -7,34 +7,33 @@ import hibernate.lesson8.homework8_1.model.Filter;
 import hibernate.lesson8.homework8_1.model.Room;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 public class RoomService {
     private RoomDAO roomDAO;
 
-    public RoomService() throws InternalServerError {
+    public RoomService() {
         roomDAO = new RoomDAO();
     }
 
     //ADMIN
     public Room addRoom(Room room) throws InternalServerError {
-//        if(room.getNumberOfGuests() <= 0 || room.getPrice() <= 0 || room.getDateAvailableFrom() == null)
-//            throw new BadRequestException("addRoom", "values can not be empty");
-//
-//        return roomDAO.addRoom(room);
-        return null;
+        if(room.getNumberOfGuests() <= 0 || room.getPrice() <= 0 || room.getDateAvailableFrom() == null)
+            throw new BadRequestException(getClass().getSimpleName()+"-addRoom. Values can not be empty");
+
+        return roomDAO.addRoom(room);
     }
 
     //ADMIN
     public void deleteRoom(Room room) throws InternalServerError {
-//        roomDAO.deleteRoom(roomId);
+        roomDAO.deleteRoom(room);
     }
 
-    public Set<Room> findRooms(Filter filter) throws InternalServerError {
-//        if(filter.getDateAvailableFrom().before(new Date()))
-//            throw new BadRequestException("findRooms", "Date can not be earlier than current");
-//
-//        return roomDAO.findRooms(filter);
-        return null;
+    public List<Room> findRooms(Filter filter) throws InternalServerError {
+        if(filter.getDateAvailableFrom().before(new Date()))
+            throw new BadRequestException(getClass().getSimpleName()+"-findRooms. Date can not be earlier than current");
+
+        return roomDAO.findRooms(filter);
     }
 }

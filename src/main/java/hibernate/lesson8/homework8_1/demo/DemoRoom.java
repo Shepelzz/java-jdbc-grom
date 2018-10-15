@@ -2,54 +2,48 @@ package hibernate.lesson8.homework8_1.demo;
 
 import hibernate.lesson8.homework8_1.controller.RoomController;
 import hibernate.lesson8.homework8_1.controller.UserController;
+import hibernate.lesson8.homework8_1.dao.HotelDAO;
+import hibernate.lesson8.homework8_1.dao.RoomDAO;
+import hibernate.lesson8.homework8_1.model.Filter;
+import hibernate.lesson8.homework8_1.model.Room;
+
+import java.util.Date;
 
 public class DemoRoom {
-    public static void main(String[] args){
-
+    public static void main(String[] args) throws Exception{
+        RoomController roomController = new RoomController();
+        UserController userController = new UserController();
 
         //добавление комнаты
-        try{
-            RoomController roomController = new RoomController();
-            UserController userController = new UserController();
-            //userController.login("admin1", "admin");
-            //Room room = new Room(2, 700, true, true, new Date(), new HotelDAO().getEntityById(1376800431651742536L));
+//            userController.login("admin", "1");
+//            Room room = new Room();
+//                room.setPrice(870);
+//                room.setPetsAllowed(false);
+//                room.setBreakfastIncluded(true);
+//                room.setDateAvailableFrom(new Date());
+//                room.setNumberOfGuests(6);
+//                room.setHotel(new HotelDAO().findById(4));
+//
+//        System.out.println(roomController.addRoom(room));
 
-            //roomController.addRoom(room);
-
-        }catch (Exception e){
-            System.err.println(e.toString());
-        }
 
         //удаление комнаты
-        try{
-            RoomController roomController = new RoomController();
-            UserController userController = new UserController();
-            //userController.login("admin1", "admin");
 
-            //roomController.deleteRoom(1410327107726515362L);
-
-        }catch (Exception e){
-            System.err.println(e.toString());
-        }
+//            userController.login("admin", "1");
+//            roomController.deleteRoom(new RoomDAO().findById(21));
 
         //поиск по фильтру
-        try{
-            RoomController roomController = new RoomController();
-            UserController userController = new UserController();
-            userController.login("user2", "pass2");
-
-//            Filter filter = Filter.newFilterBuilder()
-//                    .setNumberOfGuests(2)
-//                    .setPrice(900)
-//                    .setBreakfastIncluded(true)
-//                    .setPetsAllowed(true)
-//                    .setDateAvailableFrom(new Date())
-//                    .build();
-//            roomController.findRooms(filter).forEach(x -> System.out.println(x.toString()));
-
-        }catch (Exception e){
-            System.err.println(e.toString());
-        }
+//            RoomDAO roomDAO = new RoomDAO();
+//
+//
+//            Filter filter = new Filter();
+//            filter.setBreakfastIncluded(true);
+//            filter.setNumberOfGuests(2);
+//            filter.setPrice(1000);
+//            filter.setDateAvailableFrom(new Date());
+//
+//        for(Room r : roomDAO.findRooms(filter))
+//            System.out.println(r.toString());
 
     }
 }

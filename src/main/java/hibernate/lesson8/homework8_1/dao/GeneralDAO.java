@@ -14,11 +14,10 @@ public abstract class GeneralDAO<T extends GeneralModel>{
 
     abstract T findById(long id) throws InternalServerError;
 
-    T save(T t, Transaction transaction) throws InternalServerError {
-        //TODO ?????
-//        Transaction transaction = null;
+    T save(T t) throws InternalServerError {
+        Transaction transaction = null;
         try (Session session = createSessionFactory().openSession()) {
-//            transaction = session.getTransaction();
+            transaction = session.getTransaction();
             transaction.begin();
 
             session.save(t);
@@ -29,7 +28,7 @@ public abstract class GeneralDAO<T extends GeneralModel>{
         } catch (HibernateException e) {
             if (transaction != null)
                 transaction.rollback();
-            throw new InternalServerError("Save "+t.getClass().getName()+": "+t.toString()+" failed"+e.getMessage());
+            throw new InternalServerError("Save "+t.getClass().getSimpleName()+": "+t.toString()+" failed"+e.getMessage());
         }
     }
 
@@ -47,7 +46,7 @@ public abstract class GeneralDAO<T extends GeneralModel>{
         } catch (HibernateException e) {
             if (transaction != null)
                 transaction.rollback();
-            throw new InternalServerError("Delete "+t.getClass().getName()+": "+t.toString()+" failed"+e.getMessage());
+            throw new InternalServerError("Delete "+t.getClass().getSimpleName()+": "+t.toString()+" failed"+e.getMessage());
         }
     }
 
@@ -65,7 +64,7 @@ public abstract class GeneralDAO<T extends GeneralModel>{
         } catch (HibernateException e) {
             if (transaction != null)
                 transaction.rollback();
-            throw new InternalServerError("Update "+t.getClass().getName()+": "+t.toString()+" failed"+e.getMessage());
+            throw new InternalServerError("Update "+t.getClass().getSimpleName()+": "+t.toString()+" failed"+e.getMessage());
         }
     }
 

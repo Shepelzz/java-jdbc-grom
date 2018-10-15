@@ -15,7 +15,13 @@
         <mapping class="hibernate.lesson6.homework6_2.Product"/>
         <mapping class="hibernate.lesson7.homework7_1.entity.Hotel"/>
         <mapping class="hibernate.lesson7.homework7_1.entity.Room"/>
-        <mapping class="hibernate.lesson8.test.entity.Hotel"/>
-        <mapping class="hibernate.lesson8.test.entity.Room"/>
+
+        <mapping class="hibernate.lesson8.homework8_1.model.Hotel"/>
+        <mapping class="hibernate.lesson8.homework8_1.model.Order"/>
+        <mapping class="hibernate.lesson8.homework8_1.model.Room"/>
+        <mapping class="hibernate.lesson8.homework8_1.model.User"/>
+        <mapping class="hibernate.lesson8.homework8_1.model.types.UserType"/>
+
+
     </session-factory>
 </hibernate-configuration>

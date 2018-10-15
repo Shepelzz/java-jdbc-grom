@@ -6,6 +6,8 @@ import hibernate.lesson8.homework8_1.model.User;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
+import javax.persistence.NoResultException;
+
 public class UserDAO extends GeneralDAO<User>{
     private static final String SQL_FIND_USER_BY_NAME_AND_PASS = "SELECT * FROM FP_USER WHERE USER_NAME = :userName AND PASSWORD = :password";
 
@@ -22,18 +24,20 @@ public class UserDAO extends GeneralDAO<User>{
                     .addEntity(User.class).getSingleResult();
 
         } catch (HibernateException e) {
-            throw new InternalServerError(getClass().getName()+"-getUserByLoginAndPassword "+userName+" failed. "+e.getMessage());
+            throw new InternalServerError(getClass().getSimpleName()+"-getUserByLoginAndPassword "+userName+" failed. "+e.getMessage());
+        } catch (NoResultException noe){
+            return null;
         }
     }
 
     @Override
-    User findById(long id) throws InternalServerError {
+    public User findById(long id) throws InternalServerError {
         try (Session session = createSessionFactory().openSession()) {
 
             return session.get(User.class, id);
 
         } catch (HibernateException e) {
-            throw new InternalServerError(getClass().getName()+"-findById: "+id+" failed. "+e.getMessage());
+            throw new InternalServerError(getClass().getSimpleName()+"-findById: "+id+" failed. "+e.getMessage());
         }
     }
 }

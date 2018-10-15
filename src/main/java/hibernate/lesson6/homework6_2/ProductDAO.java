@@ -37,7 +37,8 @@ public class ProductDAO {
         try (Session session = createSessionFactory().openSession()) {
 
             return (List<Product>) session.createSQLQuery(FIND_BY_NAME_SQL)
-                    .setParameter("productName", name).list();
+                    .setParameter("productName", name)
+                    .addEntity(Product.class).list();
 
         } catch (HibernateException e) {
             System.err.println("findByName failed");

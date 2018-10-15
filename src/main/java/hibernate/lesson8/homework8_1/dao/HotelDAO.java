@@ -1,10 +1,10 @@
 package hibernate.lesson8.homework8_1.dao;
 import hibernate.lesson8.homework8_1.exception.InternalServerError;
 import hibernate.lesson8.homework8_1.model.Hotel;
-import hibernate.lesson8.homework8_1.model.Room;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
+import javax.persistence.NoResultException;
 import java.util.List;
 
 public class HotelDAO extends GeneralDAO<Hotel>{
@@ -13,7 +13,7 @@ public class HotelDAO extends GeneralDAO<Hotel>{
 
     //ADMIN
     public Hotel addHotel(Hotel hotel) throws InternalServerError {
-        return save(hotel, createSessionFactory().openSession().getTransaction());
+        return save(hotel);
     }
 
     //ADMIN
@@ -25,10 +25,11 @@ public class HotelDAO extends GeneralDAO<Hotel>{
         try (Session session = createSessionFactory().openSession()) {
 
             return (List<Hotel>) session.createSQLQuery(SQL_FIND_HOTELS_BY_NAME)
-                    .setParameter("name", name).list();
+                    .setParameter("name", name)
+                    .addEntity(Hotel.class).list();
 
         } catch (HibernateException e) {
-            throw new InternalServerError(getClass().getName()+"-findHotelByName "+name+" failed. "+e.getMessage());
+            throw new InternalServerError(getClass().getSimpleName()+"-findHotelByName "+name+" failed. "+e.getMessage());
         }
     }
 
@@ -36,21 +37,24 @@ public class HotelDAO extends GeneralDAO<Hotel>{
         try (Session session = createSessionFactory().openSession()) {
 
             return (List<Hotel>) session.createSQLQuery(SQL_FIND_HOTELS_BY_CITY)
-                    .setParameter("name", name).list();
+                    .setParameter("name", name)
+                    .addEntity(Hotel.class).list();
 
         } catch (HibernateException e) {
-            throw new InternalServerError(getClass().getName()+"-findHotelByCity "+name+" failed. "+e.getMessage());
+            throw new InternalServerError(getClass().getSimpleName()+"-findHotelByCity "+name+" failed. "+e.getMessage());
         }
     }
 
     @Override
-    Hotel findById(long id) throws InternalServerError {
+    public Hotel findById(long id) throws InternalServerError {
         try (Session session = createSessionFactory().openSession()) {
 
             return session.get(Hotel.class, id);
 
         } catch (HibernateException e) {
-            throw new InternalServerError(getClass().getName()+"-findById: "+id+" failed. "+e.getMessage());
+            throw new InternalServerError(getClass().getSimpleName()+"-findById: "+id+" failed. "+e.getMessage());
+        } catch (NoResultException noe){
+            return null;
         }
     }
 }

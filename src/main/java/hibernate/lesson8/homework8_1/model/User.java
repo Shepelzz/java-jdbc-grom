@@ -3,6 +3,7 @@ package hibernate.lesson8.homework8_1.model;
 import hibernate.lesson8.homework8_1.model.types.UserType;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @javax.persistence.Entity
@@ -20,8 +21,8 @@ public class User implements GeneralModel {
     private String password;
     @Column(name = "COUNTRY")
     private String country;
-    @ManyToOne
-    @JoinColumn(name="USER_TYPE_ID", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "USER_TYPE")
     private UserType userType;
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
     private List<Order> orders;
@@ -69,5 +70,20 @@ public class User implements GeneralModel {
 
     public void setUserType(UserType userType) {
         this.userType = userType;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", country='" + country + '\'' +
+                ", userType=" + userType.toString() +
+                '}';
     }
 }

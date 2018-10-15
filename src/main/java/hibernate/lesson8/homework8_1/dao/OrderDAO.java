@@ -9,6 +9,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import javax.persistence.NoResultException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -25,34 +26,68 @@ public class OrderDAO extends GeneralDAO<Order>{
         c.setTime(currentDate);
         c.add(Calendar.DATE, 3);
 
+        User user = userDAO.findById(userId);
+        Room room = roomDAO.findById(roomId);
+
+        Order order = new Order();
+            order.setUser(user);
+            order.setRoom(room);
+            order.setDateFrom(new Date());
+            order.setDateTo(c.getTime());
+            order.setMoneyPaid(moneyPaid);
+
+        room.setDateAvailableFrom(c.getTime());
+
         try (Session session = createSessionFactory().openSession()) {
             transaction = session.getTransaction();
             transaction.begin();
 
-            User user = userDAO.findById(userId);
-            Room room = roomDAO.findById(roomId);
-
-            Order order = new Order();
-                order.setUser(user);
-                order.setRoom(room);
-                order.setDateFrom(new Date());
-                order.setDateTo(c.getTime());
-                order.setMoneyPaid(moneyPaid);
-
-            save(order, transaction); //TODO ??????
-
-            room.setDateAvailableFrom(c.getTime());
-            roomDAO.update(room);
+            session.save(order);
+            session.update(room);
 
             session.getTransaction().commit();
+            System.out.println("Reservation for roomId: "+roomId+" and userId: "+userId+" was created");
         } catch (HibernateException e) {
             if (transaction != null)
                 transaction.rollback();
+            throw new InternalServerError("Save Order for userId: "+userId+" and roomId: "+roomId+" failed"+e.getMessage());
         }
     }
 
     public void cancelReservation(long roomId, long userId) throws InternalServerError {
+        Transaction transaction = null;
+        RoomDAO roomDAO = new RoomDAO();
 
+        Room room = roomDAO.findById(roomId);
+        room.setDateAvailableFrom(new Date());
+
+        try (Session session = createSessionFactory().openSession()) {
+            transaction = session.getTransaction();
+            transaction.begin();
+
+            session.update(room);
+            session.delete(getOrderByRoomAndUser(roomId, userId));
+
+            session.getTransaction().commit();
+            System.out.println("Reservation for roomId: "+roomId+" and userId: "+userId+" was canceled");
+        } catch (HibernateException e) {
+            if (transaction != null)
+                transaction.rollback();
+            throw new InternalServerError("Delete Order for userId: "+userId+" and roomId: "+roomId+" failed"+e.getMessage());
+        }
+    }
+
+    @Override
+    public Order findById(long id) throws InternalServerError {
+        try (Session session = createSessionFactory().openSession()) {
+
+            return session.get(Order.class, id);
+
+        } catch (HibernateException e) {
+            throw new InternalServerError(getClass().getSimpleName()+"-findById: "+id+" failed. "+e.getMessage());
+        } catch (NoResultException noe){
+            return null;
+        }
     }
 
     public Order getOrderByRoomAndUser(long roomId, long userId) throws InternalServerError {
@@ -64,18 +99,9 @@ public class OrderDAO extends GeneralDAO<Order>{
                     .addEntity(Order.class).getSingleResult();
 
         } catch (HibernateException e) {
-            throw new InternalServerError(getClass().getName()+"-getOrderByRoomAndUser roomId: "+roomId+", userId: "+userId+" failed. "+e.getMessage());
-        }
-    }
-
-    @Override
-    Order findById(long id) throws InternalServerError {
-        try (Session session = createSessionFactory().openSession()) {
-
-            return session.get(Order.class, id);
-
-        } catch (HibernateException e) {
-            throw new InternalServerError(getClass().getName()+"-findById: "+id+" failed. "+e.getMessage());
+            throw new InternalServerError(getClass().getSimpleName()+"-getOrderByRoomAndUser roomId: "+roomId+", userId: "+userId+" failed. "+e.getMessage());
+        } catch (NoResultException noe){
+            return null;
         }
     }
 }

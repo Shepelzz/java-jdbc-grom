@@ -11,29 +11,29 @@ import java.util.Date;
 public class OrderService {
     private OrderDAO orderDao;
 
-    public OrderService() throws InternalServerError {
+    public OrderService() {
         orderDao = new OrderDAO();
     }
 
     public void bookRoom(long roomId, long userId, double moneyPaid) throws InternalServerError {
-//        if(orderDao.getOrderByRoomAndUser(roomId, userId) != null)
-//            throw new BadRequestException("bookRoom", "Order room id:"+roomId+" is already booked by user id:"+userId+"");
-//
-//        Room room = new RoomDAO().getEntityById(roomId);
-//        if(room == null)
-//            throw new BadRequestException("bookRoom", "Room with id:"+roomId+" was not found");
-//        if(room.getDateAvailableFrom().after(new Date()))
-//            throw new BadRequestException("bookRoom", "Order room id:"+roomId+" is reserved from "+room.getDateAvailableFrom());
-//        if(room.getPrice() > moneyPaid)
-//            throw new BadRequestException("bookRoom", "Order money paid is not enough" );
-//
-//        orderDao.bookRoom(roomId, userId, moneyPaid);
+        if(orderDao.getOrderByRoomAndUser(roomId, userId) != null)
+            throw new BadRequestException(getClass().getSimpleName()+"-bookRoom. Order room id:"+roomId+" is already booked by user id:"+userId+"");
+
+        Room room = new RoomDAO().findById(roomId);
+        if(room == null)
+            throw new BadRequestException(getClass().getSimpleName()+"-bookRoom. Room with id:"+roomId+" was not found");
+        if(room.getDateAvailableFrom().after(new Date()))
+            throw new BadRequestException(getClass().getSimpleName()+"-bookRoom. Order room id:"+roomId+" is reserved from"+room.getDateAvailableFrom());
+        if(room.getPrice() > moneyPaid)
+            throw new BadRequestException(getClass().getSimpleName()+"-bookRoom. Order money paid is not enough");
+
+        orderDao.bookRoom(roomId, userId, moneyPaid);
     }
 
     public void cancelReservation(long roomId, long userId) throws InternalServerError {
-//        if(orderDao.getOrderByRoomAndUser(roomId, userId) == null)
-//            throw new BadRequestException("cancelReservation", "There is no order for room id:"+roomId+" and user id:"+userId);
-//
-//        orderDao.cancelReservation(roomId, userId);
+        if(orderDao.getOrderByRoomAndUser(roomId, userId) == null)
+            throw new BadRequestException(getClass().getSimpleName()+"-cancelReservation. There is no order for room id:"+roomId+" and user id:"+userId);
+
+        orderDao.cancelReservation(roomId, userId);
     }
 }
