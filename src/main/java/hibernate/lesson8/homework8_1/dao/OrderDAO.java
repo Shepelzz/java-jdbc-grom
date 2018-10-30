@@ -1,7 +1,6 @@
 package hibernate.lesson8.homework8_1.dao;
 
 import hibernate.lesson8.homework8_1.exception.InternalServerError;
-import hibernate.lesson8.homework8_1.model.GeneralModel;
 import hibernate.lesson8.homework8_1.model.Order;
 import hibernate.lesson8.homework8_1.model.Room;
 import hibernate.lesson8.homework8_1.model.User;
@@ -15,6 +14,7 @@ import java.util.Date;
 
 public class OrderDAO extends GeneralDAO<Order>{
     private static final String SQL_GET_ORDER_BY_ROOM_AND_USER = "SELECT * FROM FP_ORDER WHERE USER_ID = :userId AND ROOM_ID = :roomId";
+//    private static final String SQL_DELETE_ORDER_BY_ROOM_AND_USER = "DELETE FROM FP_ORDER WHERE USER_ID = :userId AND ROOM_ID = :roomId";
 
     public void bookRoom(long roomId, long userId, double moneyPaid) throws InternalServerError {
         Transaction transaction = null;
@@ -65,8 +65,8 @@ public class OrderDAO extends GeneralDAO<Order>{
             transaction = session.getTransaction();
             transaction.begin();
 
-            session.update(room);
             session.delete(getOrderByRoomAndUser(roomId, userId));
+            session.update(room);
 
             session.getTransaction().commit();
             System.out.println("Reservation for roomId: "+roomId+" and userId: "+userId+" was canceled");

@@ -5,14 +5,9 @@ import hibernate.lesson8.homework8_1.model.Filter;
 import hibernate.lesson8.homework8_1.model.Room;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 
 import javax.persistence.NoResultException;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class RoomDAO extends GeneralDAO<Room>{
     private static final String SQL_FOND_BY_PARAMETERS = "SELECT r.* FROM FP_ROOM r\n" +

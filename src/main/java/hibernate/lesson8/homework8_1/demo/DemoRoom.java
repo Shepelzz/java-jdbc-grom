@@ -2,8 +2,6 @@ package hibernate.lesson8.homework8_1.demo;
 
 import hibernate.lesson8.homework8_1.controller.RoomController;
 import hibernate.lesson8.homework8_1.controller.UserController;
-import hibernate.lesson8.homework8_1.dao.HotelDAO;
-import hibernate.lesson8.homework8_1.dao.RoomDAO;
 import hibernate.lesson8.homework8_1.model.Filter;
 import hibernate.lesson8.homework8_1.model.Room;
 
@@ -13,6 +11,7 @@ public class DemoRoom {
     public static void main(String[] args) throws Exception{
         RoomController roomController = new RoomController();
         UserController userController = new UserController();
+
 
         //добавление комнаты
 //            userController.login("admin", "1");
@@ -29,21 +28,20 @@ public class DemoRoom {
 
         //удаление комнаты
 
-//            userController.login("admin", "1");
+            userController.login("admin", "1");
 //            roomController.deleteRoom(new RoomDAO().findById(21));
 
         //поиск по фильтру
-//            RoomDAO roomDAO = new RoomDAO();
-//
-//
-//            Filter filter = new Filter();
-//            filter.setBreakfastIncluded(true);
-//            filter.setNumberOfGuests(2);
-//            filter.setPrice(1000);
-//            filter.setDateAvailableFrom(new Date());
-//
-//        for(Room r : roomDAO.findRooms(filter))
-//            System.out.println(r.toString());
+
+
+            Filter filter = new Filter();
+            filter.setBreakfastIncluded(true);
+            filter.setNumberOfGuests(2);
+            filter.setPrice(1000);
+            filter.setDateAvailableFrom(new Date());
+
+        for(Room r : roomController.findRooms(filter))
+            System.out.println(r.toString());
 
     }
 }
