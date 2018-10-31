@@ -6,7 +6,6 @@ import hibernate.lesson8.homework8_1.exception.InternalServerError;
 import hibernate.lesson8.homework8_1.model.Filter;
 import hibernate.lesson8.homework8_1.model.Room;
 
-import java.util.Date;
 import java.util.List;
 
 public class RoomService {
@@ -30,8 +29,8 @@ public class RoomService {
     }
 
     public List<Room> findRooms(Filter filter) throws InternalServerError {
-        if(filter.getDateAvailableFrom().after(new Date()))
-            throw new BadRequestException(getClass().getSimpleName()+"-findRooms. Date can not be earlier than current");
+//        if(filter.getDateAvailableFrom().after(new Date()))
+//            throw new BadRequestException(getClass().getSimpleName()+"-findRooms. Date can not be earlier than current");
 
         return roomDAO.findRooms(filter);
     }

@@ -2,17 +2,33 @@ package hibernate.lesson8.homework8_1.dao;
 
 import hibernate.lesson8.homework8_1.exception.InternalServerError;
 import hibernate.lesson8.homework8_1.model.GeneralModel;
-import hibernate.lesson8.homework8_1.model.Hotel;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+import javax.persistence.NoResultException;
+
 public abstract class GeneralDAO<T extends GeneralModel>{
+    private Class<T> clazz;
     private SessionFactory sessionFactory;
 
-    abstract T findById(long id) throws InternalServerError;
+    public final void setClazz( Class<T> clazzToSet ){
+        this.clazz = clazzToSet;
+    }
+
+    public T findById(long id) throws InternalServerError{
+        try (Session session = createSessionFactory().openSession()) {
+
+            return session.get(clazz, id);
+
+        } catch (HibernateException e) {
+            throw new InternalServerError(getClass().getSimpleName()+"-findById: "+id+" failed. "+e.getMessage());
+        } catch (NoResultException noe){
+            return null;
+        }
+    }
 
     T save(T t) throws InternalServerError {
         Transaction transaction = null;

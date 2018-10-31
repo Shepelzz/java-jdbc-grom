@@ -4,12 +4,15 @@ import hibernate.lesson8.homework8_1.model.Hotel;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
-import javax.persistence.NoResultException;
 import java.util.List;
 
 public class HotelDAO extends GeneralDAO<Hotel>{
     private static final String SQL_FIND_HOTELS_BY_NAME = "SELECT * FROM FP_HOTEL WHERE HOTEL_NAME = :name";
     private static final String SQL_FIND_HOTELS_BY_CITY = "SELECT * FROM FP_HOTEL WHERE HOTEL_CITY = :name";
+
+    public HotelDAO() {
+        setClazz(Hotel.class);
+    }
 
     //ADMIN
     public Hotel addHotel(Hotel hotel) throws InternalServerError {
@@ -45,16 +48,16 @@ public class HotelDAO extends GeneralDAO<Hotel>{
         }
     }
 
-    @Override
-    public Hotel findById(long id) throws InternalServerError {
-        try (Session session = createSessionFactory().openSession()) {
-
-            return session.get(Hotel.class, id);
-
-        } catch (HibernateException e) {
-            throw new InternalServerError(getClass().getSimpleName()+"-findById: "+id+" failed. "+e.getMessage());
-        } catch (NoResultException noe){
-            return null;
-        }
-    }
+//    @Override
+//    public Hotel findById(long id) throws InternalServerError {
+//        try (Session session = createSessionFactory().openSession()) {
+//
+//            return session.get(Hotel.class, id);
+//
+//        } catch (HibernateException e) {
+//            throw new InternalServerError(getClass().getSimpleName()+"-findById: "+id+" failed. "+e.getMessage());
+//        } catch (NoResultException noe){
+//            return null;
+//        }
+//    }
 }

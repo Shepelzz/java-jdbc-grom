@@ -1,7 +1,6 @@
 package hibernate.lesson8.homework8_1.dao;
 
 import hibernate.lesson8.homework8_1.exception.InternalServerError;
-import hibernate.lesson8.homework8_1.model.Hotel;
 import hibernate.lesson8.homework8_1.model.User;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -10,6 +9,10 @@ import javax.persistence.NoResultException;
 
 public class UserDAO extends GeneralDAO<User>{
     private static final String SQL_FIND_USER_BY_NAME_AND_PASS = "SELECT * FROM FP_USER WHERE USER_NAME = :userName AND PASSWORD = :password";
+
+    public UserDAO() {
+        setClazz(User.class);
+    }
 
     public User registerUser(User user) throws InternalServerError {
         return save(user);
@@ -30,14 +33,14 @@ public class UserDAO extends GeneralDAO<User>{
         }
     }
 
-    @Override
-    public User findById(long id) throws InternalServerError {
-        try (Session session = createSessionFactory().openSession()) {
-
-            return session.get(User.class, id);
-
-        } catch (HibernateException e) {
-            throw new InternalServerError(getClass().getSimpleName()+"-findById: "+id+" failed. "+e.getMessage());
-        }
-    }
+//    @Override
+//    public User findById(long id) throws InternalServerError {
+//        try (Session session = createSessionFactory().openSession()) {
+//
+//            return session.get(User.class, id);
+//
+//        } catch (HibernateException e) {
+//            throw new InternalServerError(getClass().getSimpleName()+"-findById: "+id+" failed. "+e.getMessage());
+//        }
+//    }
 }

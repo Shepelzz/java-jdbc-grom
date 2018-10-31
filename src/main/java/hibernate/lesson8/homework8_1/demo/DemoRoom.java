@@ -35,10 +35,10 @@ public class DemoRoom {
 
 
             Filter filter = new Filter();
-            filter.setBreakfastIncluded(true);
             filter.setNumberOfGuests(2);
-            filter.setPrice(1000);
+            filter.setPrice(400D);
             filter.setDateAvailableFrom(new Date());
+            filter.setName("Redison BLU");
 
         for(Room r : roomController.findRooms(filter))
             System.out.println(r.toString());

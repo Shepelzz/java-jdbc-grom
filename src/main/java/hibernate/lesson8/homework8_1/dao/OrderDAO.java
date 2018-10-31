@@ -16,6 +16,11 @@ public class OrderDAO extends GeneralDAO<Order>{
     private static final String SQL_GET_ORDER_BY_ROOM_AND_USER = "SELECT * FROM FP_ORDER WHERE USER_ID = :userId AND ROOM_ID = :roomId";
 //    private static final String SQL_DELETE_ORDER_BY_ROOM_AND_USER = "DELETE FROM FP_ORDER WHERE USER_ID = :userId AND ROOM_ID = :roomId";
 
+
+    public OrderDAO() {
+        setClazz(Order.class);
+    }
+
     public void bookRoom(long roomId, long userId, double moneyPaid) throws InternalServerError {
         Transaction transaction = null;
         RoomDAO roomDAO = new RoomDAO();
@@ -77,18 +82,18 @@ public class OrderDAO extends GeneralDAO<Order>{
         }
     }
 
-    @Override
-    public Order findById(long id) throws InternalServerError {
-        try (Session session = createSessionFactory().openSession()) {
-
-            return session.get(Order.class, id);
-
-        } catch (HibernateException e) {
-            throw new InternalServerError(getClass().getSimpleName()+"-findById: "+id+" failed. "+e.getMessage());
-        } catch (NoResultException noe){
-            return null;
-        }
-    }
+//    @Override
+//    public Order findById(long id) throws InternalServerError {
+//        try (Session session = createSessionFactory().openSession()) {
+//
+//            return session.get(Order.class, id);
+//
+//        } catch (HibernateException e) {
+//            throw new InternalServerError(getClass().getSimpleName()+"-findById: "+id+" failed. "+e.getMessage());
+//        } catch (NoResultException noe){
+//            return null;
+//        }
+//    }
 
     public Order getOrderByRoomAndUser(long roomId, long userId) throws InternalServerError {
         try (Session session = createSessionFactory().openSession()) {
