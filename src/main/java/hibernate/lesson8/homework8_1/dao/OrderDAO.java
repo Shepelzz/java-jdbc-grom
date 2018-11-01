@@ -3,45 +3,22 @@ package hibernate.lesson8.homework8_1.dao;
 import hibernate.lesson8.homework8_1.exception.InternalServerError;
 import hibernate.lesson8.homework8_1.model.Order;
 import hibernate.lesson8.homework8_1.model.Room;
-import hibernate.lesson8.homework8_1.model.User;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import javax.persistence.NoResultException;
-import java.util.Calendar;
 import java.util.Date;
 
 public class OrderDAO extends GeneralDAO<Order>{
     private static final String SQL_GET_ORDER_BY_ROOM_AND_USER = "SELECT * FROM FP_ORDER WHERE USER_ID = :userId AND ROOM_ID = :roomId";
-//    private static final String SQL_DELETE_ORDER_BY_ROOM_AND_USER = "DELETE FROM FP_ORDER WHERE USER_ID = :userId AND ROOM_ID = :roomId";
-
 
     public OrderDAO() {
         setClazz(Order.class);
     }
 
-    public void bookRoom(long roomId, long userId, double moneyPaid) throws InternalServerError {
+    public void bookRoom(Order order, Room room) throws InternalServerError {
         Transaction transaction = null;
-        RoomDAO roomDAO = new RoomDAO();
-        UserDAO userDAO = new UserDAO();
-
-        Calendar c = Calendar.getInstance();
-        Date currentDate = new Date();
-        c.setTime(currentDate);
-        c.add(Calendar.DATE, 3);
-
-        User user = userDAO.findById(userId);
-        Room room = roomDAO.findById(roomId);
-
-        Order order = new Order();
-            order.setUser(user);
-            order.setRoom(room);
-            order.setDateFrom(new Date());
-            order.setDateTo(c.getTime());
-            order.setMoneyPaid(moneyPaid);
-
-        room.setDateAvailableFrom(c.getTime());
 
         try (Session session = createSessionFactory().openSession()) {
             transaction = session.getTransaction();
@@ -51,11 +28,11 @@ public class OrderDAO extends GeneralDAO<Order>{
             session.update(room);
 
             session.getTransaction().commit();
-            System.out.println("Reservation for roomId: "+roomId+" and userId: "+userId+" was created");
+            System.out.println("Reservation for roomId: "+room.getId()+" and was created by user id: "+order.getUser().getId());
         } catch (HibernateException e) {
             if (transaction != null)
                 transaction.rollback();
-            throw new InternalServerError("Save Order for userId: "+userId+" and roomId: "+roomId+" failed"+e.getMessage());
+            throw new InternalServerError("Save Order for userId: "+UserSession.getLoggedUser().getId()+" and roomId: "+room.getId()+" failed"+e.getMessage());
         }
     }
 
@@ -81,19 +58,6 @@ public class OrderDAO extends GeneralDAO<Order>{
             throw new InternalServerError("Delete Order for userId: "+userId+" and roomId: "+roomId+" failed"+e.getMessage());
         }
     }
-
-//    @Override
-//    public Order findById(long id) throws InternalServerError {
-//        try (Session session = createSessionFactory().openSession()) {
-//
-//            return session.get(Order.class, id);
-//
-//        } catch (HibernateException e) {
-//            throw new InternalServerError(getClass().getSimpleName()+"-findById: "+id+" failed. "+e.getMessage());
-//        } catch (NoResultException noe){
-//            return null;
-//        }
-//    }
 
     public Order getOrderByRoomAndUser(long roomId, long userId) throws InternalServerError {
         try (Session session = createSessionFactory().openSession()) {

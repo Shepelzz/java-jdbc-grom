@@ -35,5 +35,7 @@ public class UserSession {
             throw new PermissionError(action, "User must have "+userType.name()+" permissions to perform this operation");
     }
 
-
+    public static User getLoggedUser() {
+        return loggedUser;
+    }
 }

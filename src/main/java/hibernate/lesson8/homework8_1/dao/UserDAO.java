@@ -32,15 +32,4 @@ public class UserDAO extends GeneralDAO<User>{
             return null;
         }
     }
-
-//    @Override
-//    public User findById(long id) throws InternalServerError {
-//        try (Session session = createSessionFactory().openSession()) {
-//
-//            return session.get(User.class, id);
-//
-//        } catch (HibernateException e) {
-//            throw new InternalServerError(getClass().getSimpleName()+"-findById: "+id+" failed. "+e.getMessage());
-//        }
-//    }
 }

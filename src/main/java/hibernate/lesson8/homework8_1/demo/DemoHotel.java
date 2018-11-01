@@ -3,8 +3,6 @@ package hibernate.lesson8.homework8_1.demo;
 
 import hibernate.lesson8.homework8_1.controller.HotelController;
 import hibernate.lesson8.homework8_1.controller.UserController;
-import hibernate.lesson8.homework8_1.dao.HotelDAO;
-import hibernate.lesson8.homework8_1.dao.RoomDAO;
 
 public class DemoHotel {
     public static void main(String[] args) throws Exception{
@@ -34,10 +32,12 @@ public class DemoHotel {
 //        userController.login("user", "1");
 //        System.out.println(hotelController.findHotelByCity("Odessa"));
 
-        HotelDAO hotelDAO = new HotelDAO();
-        System.out.println(hotelDAO.findById(3).toString());
+//        HotelDAO hotelDAO = new HotelDAO();
+//        System.out.println(hotelDAO.findById(3).toString());
+//
+//        RoomDAO roomDAO = new RoomDAO();
+//        System.out.println(roomDAO.findById(13).toString());
 
-        RoomDAO roomDAO = new RoomDAO();
-        System.out.println(roomDAO.findById(13).toString());
+
     }
 }

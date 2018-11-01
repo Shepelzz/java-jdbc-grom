@@ -2,8 +2,8 @@ package hibernate.lesson8.homework8_1.demo;
 
 import hibernate.lesson8.homework8_1.controller.RoomController;
 import hibernate.lesson8.homework8_1.controller.UserController;
+import hibernate.lesson8.homework8_1.dao.RoomDAO;
 import hibernate.lesson8.homework8_1.model.Filter;
-import hibernate.lesson8.homework8_1.model.Room;
 
 import java.util.Date;
 
@@ -36,12 +36,15 @@ public class DemoRoom {
 
             Filter filter = new Filter();
             filter.setNumberOfGuests(2);
-            filter.setPrice(400D);
+//            filter.setPrice(400D);
             filter.setDateAvailableFrom(new Date());
             filter.setName("Redison BLU");
 
-        for(Room r : roomController.findRooms(filter))
-            System.out.println(r.toString());
+        RoomDAO roomDAO = new RoomDAO();
+        roomDAO.findRooms(filter);
+
+//        for(Room r : roomController.findRooms(filter))
+//            System.out.println(r.toString());
 
     }
 }

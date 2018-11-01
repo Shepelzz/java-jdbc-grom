@@ -9,9 +9,11 @@ public class DemoOrder {
         UserController userController = new UserController();
 
         //резервация
-//        userController.login("user", "1");
-//        orderController.bookRoom(16, 3, 21040);
+        userController.login("user", "1");
+        orderController.bookRoom(16, 3, 21040);
 
+//        RoomDAO roomDAO = new RoomDAO();
+//        System.out.println(roomDAO.findById(16));
 
         //отмена резервации
 

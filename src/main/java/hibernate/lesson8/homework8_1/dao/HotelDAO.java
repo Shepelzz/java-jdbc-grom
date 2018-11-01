@@ -47,17 +47,4 @@ public class HotelDAO extends GeneralDAO<Hotel>{
             throw new InternalServerError(getClass().getSimpleName()+"-findHotelByCity "+name+" failed. "+e.getMessage());
         }
     }
-
-//    @Override
-//    public Hotel findById(long id) throws InternalServerError {
-//        try (Session session = createSessionFactory().openSession()) {
-//
-//            return session.get(Hotel.class, id);
-//
-//        } catch (HibernateException e) {
-//            throw new InternalServerError(getClass().getSimpleName()+"-findById: "+id+" failed. "+e.getMessage());
-//        } catch (NoResultException noe){
-//            return null;
-//        }
-//    }
 }
